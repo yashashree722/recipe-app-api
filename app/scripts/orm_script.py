@@ -79,13 +79,38 @@ def run():
     # else:
     #     print('not created')
     # pprint(connection.queries)
-     rating = Rating(
-        restaurant = Restaurant.objects.first(),
-        user = User.objects.first(),
-        rating = 11
+    #  rating = Rating(
+    #     restaurant = Restaurant.objects.first(),
+    #     user = User.objects.first(),
+    #     rating = 11
+    # )
+    #  rating.full_clean() # this will run the validators
+    #  rating.save()
+    
+    # res = Restaurant.objects.first()
+    # print(res.name)
+    # res.name ='yashaashree cafe'
+    # res.save(update_fields=['name'])
+    # pprint(connection.queries)
+    
+    
+    
+    # checking if  models is added or updated _state.adding
+    
+    # res = Restaurant.objects.all()
+    # res .update(
+    #     date_opened = timezone.now(),
+    # )
+    # # res.save()
+    
+    
+    res = Restaurant.objects.filter(name__startswith='y')
+    print(res)
+    res .update(
+        date_opened = timezone.now() - timezone.timedelta(days=365),
     )
-     rating.full_clean() # this will run the validators
-     rating.save()
+    # res.save()
+    print(connection.queries)
     
 
 

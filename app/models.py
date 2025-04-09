@@ -40,6 +40,9 @@ class Restaurant(models.Model):
     def __str__(self):
         return self.name
     
+    def save(self , *args, **kwargs):
+        print(self._state.adding)
+        super().save(*args, **kwargs)
 # user mode
 class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -59,6 +62,9 @@ class Sale(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.SET_NULL, null= True, related_name='sales')
     income = models.DecimalField(max_digits=8, decimal_places=2)
     datetime = models.DateTimeField()
+    
+    def __str__(self):
+        return f"Sale: {self.restaurant.name} - {self.income}"
     
     
 

@@ -8,5 +8,5 @@ class RestaurantForm(forms.ModelForm):
         fields = ('name','restaurant_type')
         
         
-        #  maze cha ges 
+      
        
