@@ -6,4 +6,7 @@ class RestaurantForm(forms.ModelForm):
     class Meta:
         model = Restaurant
         fields = ('name','restaurant_type')
+        
+        
+        #  maze cha ges 
        
