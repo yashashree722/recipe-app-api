@@ -1,10 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.core.validators import  MinValueValidator, MaxValueValidator
+from django.forms import ValidationError
 
 # restaurant model
 
 
+def validate_bagin_a(value):
+    if not value.startswith('a'):
+        raise ValidationError(
+           'This field must start with "a"',
+        )
+    
 class Restaurant(models.Model):
     class TypeChoices(models.TextChoices):
         INDIAN  ='IN', 'Indian'
@@ -15,11 +22,19 @@ class Restaurant(models.Model):
         FASTFOOD = 'FF', 'Fast Food'
         OTHER = 'OT', 'Other'
             
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, validators=[validate_bagin_a])
     website = models.URLField(default='')
-    date_opened = models.DateField()
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    date_opened = models.DateField(auto_now_add=True)
+    latitude = models.FloatField(
+        validators=[MinValueValidator(-90),
+        MaxValueValidator(90)],
+        null=True, blank=True
+    )
+    longitude = models.FloatField(
+        validators=[MinValueValidator(-180),
+        MaxValueValidator(180)],
+        null=True, blank=True   
+    )
     restaurant_type = models.CharField(max_length=2, choices=TypeChoices.choices)
     
     def __str__(self):
@@ -27,9 +42,12 @@ class Restaurant(models.Model):
     
 # user mode
 class Rating(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ratings')
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='restaurant')
-    rating = models.PositiveSmallIntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='ratings')
+    rating = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1),
+                    MaxValueValidator(10)]
+    )
     
     def __str__(self):
         return f"ratings: {self.rating}"
@@ -38,7 +56,7 @@ class Rating(models.Model):
     
 
 class Sale(models.Model):
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.SET_NULL, null= True)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.SET_NULL, null= True, related_name='sales')
     income = models.DecimalField(max_digits=8, decimal_places=2)
     datetime = models.DateTimeField()
     

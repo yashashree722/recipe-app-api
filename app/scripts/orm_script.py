@@ -2,6 +2,7 @@ from app.models import Restaurant, Rating, Sale
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db import connection
+from pprint import pprint
 
 
 def run():
@@ -36,10 +37,62 @@ def run():
     #     restaurant = restaurant,
     #     rating = 5
     # )
-    print(Rating.objects.filter(rating=5))
+    # print(Rating.objects.filter(rating__gte=9).count())
+    # res =Rating.objects.exclude(rating__gte=9)
+    # pprint(res.count())
+    
+    # res = Restaurant.objects.all()
+    # pprint(res)
+    # pprint(connection.queries)
     
     
+    #  query related field 
+    # res = Rating.objects.first()
+    # print(res.restaurant.name)
     
+    # pprint(connection.queries)
+    
+    # rate = Rating.objects.first()   
+    # print(rate.restaurant.name)
+    
+    # res = Restaurant.objects.first()
+    # print(res.ratings.all()) 
+    
+    # Sale.objects.create(
+    #     restaurant = Restaurant.objects.last(),
+    #     income = 44.0,
+    #     datetime = timezone.now()
+    # )
+    # # print(connection.queries)
+    # res = Restaurant.objects.first()
+    # print(res.sales.all())
+    
+    # user = User.objects.first()
+    # restaurant = Restaurant.objects.first()
+    # rating , created = Rating.objects.get_or_create(
+    #     restaurant = restaurant,
+    #     user = user,
+    #     rating =1
+    # )
+    # if created:
+    #     print('created')
+    # else:
+    #     print('not created')
+    # pprint(connection.queries)
+     rating = Rating(
+        restaurant = Restaurant.objects.first(),
+        user = User.objects.first(),
+        rating = 11
+    )
+     rating.full_clean() # this will run the validators
+     rating.save()
+    
+
+
+
+
+
+
 
     
     
