@@ -104,13 +104,27 @@ def run():
     # # res.save()
     
     
-    res = Restaurant.objects.filter(name__startswith='y')
-    print(res)
-    res .update(
-        date_opened = timezone.now() - timezone.timedelta(days=365),
-    )
-    # res.save()
-    print(connection.queries)
+    # res = Restaurant.objects.filter(name__startswith='y')
+    # print(res)
+    # res .update(
+    #     date_opened = timezone.now() - timezone.timedelta(days=365),
+    # )
+    # # res.save()
+    # print(connection.queries)
+    
+    
+    # res = Restaurant.objects.first()
+    # print(res.pk)
+    # print(res.ratings.all())
+    # print(res.delete())
+    # print(connection.queries)
+    
+    Restaurant.objects.all().delete()    
+    # to deelete the data from the table like all the data will be removed
+    
+    
+    
+    
     
 
 
