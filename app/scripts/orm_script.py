@@ -119,8 +119,31 @@ def run():
     # print(res.delete())
     # print(connection.queries)
     
-    Restaurant.objects.all().delete()    
-    # to deelete the data from the table like all the data will be removed
+    # print(Restaurant.objects.filter(restaurant_type = Restaurant.TypeChoices.CHINESE) ) 
+    
+    
+    # print(Restaurant.objects.filter(name ='Pizzeria 2') ) 
+    # print(Restaurant.objects.get(name ='Pizzeria 2') ) 
+    
+    
+    #  example of AND 
+    # res = Restaurant.objects.filter(
+    #     restaurant_type = Restaurant.TypeChoices.CHINESE,
+    #     name__startswith = 'C',
+    # )
+    
+    # print(res)
+    
+    
+    #  IN filter 
+    ch = Restaurant.TypeChoices.CHINESE
+    mx = Restaurant.TypeChoices.MEXICAN
+    it = Restaurant.TypeChoices.ITALIAN 
+    check_types = [ch, mx, it]
+    res = Restaurant.objects.filter(
+    restaurant_type__in = check_types,
+    )
+    print(res)
     
     
     
