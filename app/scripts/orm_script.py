@@ -273,13 +273,28 @@ def run():
         # Annotating  models = when we want result for each item in qs use annotate 
         # eg : we want all res and wanted to get total number of char in each Restaurant
         # use annotate in this case as we are running query for each restaurant
-        res = Restaurant.objects.annotate(
-            name_length = Length('name')
-        ).filter(
-            name_length__gt = 5
-        ).order_by('-name_length')
-        print(res.values('name_length'))
+        # res = Restaurant.objects.annotate(
+        #     name_length = Length('name')
+        # ).filter(
+        #     name_length__gt = 5
+        # ).order_by('-name_length')
+        # print(res.values('name_length'))
         
+        
+        # res = Restaurant.objects.annotate(
+        #     total_sale = Sum('sales__income') ,
+        #     avg_ratings = Avg('ratings__rating')
+        # )
+        # print(res.values('name','total_sale','avg_ratings'))
+        # # print(connection.queries)  
+         
+         
+         
+        #  if we use values before annotate theen its going to group by the fields we are using in values
+        res = Restaurant.objects.values('restaurant_type').annotate(
+            num_rate =  Count('ratings')
+        )
+        print(res.values('restaurant_type','num_rate'))
         
 
 
