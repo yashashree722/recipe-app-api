@@ -24,3 +24,4 @@ def index(request):
     )
     res =Restaurant.objects.prefetch_related('ratings' ,monthly_sales ).filter(ratings__rating=5)
     # print(res)
+    

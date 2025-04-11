@@ -73,10 +73,17 @@ class Sale(models.Model):
     
     
     
-   # Restaurant can have many staff members and staff can work in many restaurants 
+# Restaurant can have many staff members and staff can work in many restaurants 
 class Staff(models.Model):
     name = models.CharField(max_length=100)
-    restaurant = models.ManyToManyField(Restaurant)
+    restaurant = models.ManyToManyField(Restaurant, through='StaffRestaurant')
+    
+    
+class StaffRestaurant(models.Model):
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    salary = models.FloatField(null=True)
+    
     
     
     

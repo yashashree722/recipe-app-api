@@ -1,4 +1,4 @@
-from app.models import Restaurant, Rating, Sale
+from app.models import Restaurant, Rating, Sale,Staff
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db import connection
@@ -202,11 +202,27 @@ def run():
         # print(res1)
         
         #  filterinng by Foreign key value 
-        #  eg find all ratings associated with res begin with  'C'
-        my_res =Rating.objects.filter(
-        restaurant__name__startswith ='C'
+        # #  eg find all ratings associated with res begin with  'C'
+        # my_res =Rating.objects.filter(
+        # restaurant__name__startswith ='C'
+        # )
+        # print(my_res)
+        
+        staff , created  = Staff.objects.get_or_create(name ='John Doe')
+        print(staff)
+        # print(type(staff.restaurants))
+        # add, all , count , remove , set , clear , create , filter 
+        
+        # 
+        staff.restaurants.add(
+            Restaurant.objects.first(),
+        Restaurant.objects.last()
         )
-        print(my_res)
+        
+        staff.restaurants.set(Restaurant.objects.all()[:5])
+        
+       
+
 
 
 
