@@ -3,17 +3,31 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db import connection
 from pprint import pprint
-from django.db.models.functions import  Upper, Lower
+from django.db.models.functions import  Upper, Lower,Length
+from django.db.models import Count,Avg, Sum, Min, Max
+from django.utils import timezone
+from datetime import timedelta
 
 
 def run():
-    # indexing of rows 
-    # restaurant = Restaurant.objects.all()[0]
-    # print(restaurant)
-    # print(connection.queries)
+    # one_moth_ago = timezone.now() - timedelta(days=30)
+    # sale  = Sale.objects.filter(datetime__gte=one_moth_ago)
+    # print(sale.aggregate(total_income = Sum('income')))
     
-    #  create object with models.objects.create () method 
-    # Restaurant.objects.create(
+    # print(Restaurant.objects.aggregate(total =Count('id')))
+    # print(Rating.objects.aggregate(avgs_val =Avg('rating')))
+    
+    # ans =   Sale.objects.filter(
+    #     restaurant__restaurant_type = Restaurant.TypeChoices.CHINESE
+    # ).aggregate(min= Min('income'))
+    # print(ans)
+    # # indexing of rows 
+    # # restaurant = Restaurant.objects.all()[0]
+    # # print(restaurant)
+    # # print(connection.queries)
+    
+    # #  create object with models.objects.create () method 
+    # # Restaurant.objects.create(
     #     name = 'Restaurant 1',
     #     date_opened = timezone.now(),
     #     restaurant_type = Restaurant.TypeChoices.OTHER,
@@ -243,12 +257,29 @@ def run():
         
         
         #  getting related filed with using value ()
-        IT = Restaurant.TypeChoices.ITALIAN
-        raatings = Rating.objects.filter(restaurant__restaurant_type = IT).values(
-            'restaurant__name',
-            'rating'
-        )
-        print(raatings)
+        # IT = Restaurant.TypeChoices.ITALIAN
+        # raatings = Rating.objects.filter(restaurant__restaurant_type = IT).values(
+        #     'restaurant__name',
+        #     'rating'
+        # )
+        # print(raatings)
+        
+        
+        #  value_list () : instead of returning a dictionary it return tuple
+        # # flat = True will return a  list
+        # res = Restaurant.objects.values_list('latitude',flat=True)
+        # print(res)
+        
+        # Annotating  models = when we want result for each item in qs use annotate 
+        # eg : we want all res and wanted to get total number of char in each Restaurant
+        # use annotate in this case as we are running query for each restaurant
+        res = Restaurant.objects.annotate(
+            name_length = Length('name')
+        ).filter(
+            name_length__gt = 5
+        ).order_by('-name_length')
+        print(res.values('name_length'))
+        
         
 
 
