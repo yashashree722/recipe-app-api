@@ -136,19 +136,81 @@ def run():
     
     
     #  IN filter 
-    ch = Restaurant.TypeChoices.CHINESE
-    mx = Restaurant.TypeChoices.MEXICAN
-    it = Restaurant.TypeChoices.ITALIAN 
-    check_types = [ch, mx, it]
-    res = Restaurant.objects.filter(
-    restaurant_type__in = check_types,
-    )
-    print(res)
+    # ch = Restaurant.TypeChoices.CHINESE
+    # mx = Restaurant.TypeChoices.MEXICAN
+    # it = Restaurant.TypeChoices.ITALIAN 
+    # check_types = [ch, mx, it]
+    # res = Restaurant.objects.filter(
+    # restaurant_type__in = check_types,
+    # )
+    # print(res)
+    
+    
+    #  exclude example 
+    # ch = Restaurant.TypeChoices.CHINESE
+    # In = Restaurant.TypeChoices.INDIAN
+    # mx = Restaurant.TypeChoices.MEXICAN
+    # res = Restaurant.objects.exclude(
+    #     restaurant_type__in =[ch, In, mx]
+    # )
+    # print(res)    
+    
+    
+    #  filtering with gt and lt
+    #  get the restaursnt which are name begin with A ,B ,C     
+    
+#    print( Restaurant.objects.filter(
+#         name__lt ='E'
+#     ))
+    
+    #    print( Restaurant.objects.filter(
+    #     longitude__gt =0
+    # ))
+    
+    #  range lookup 
+    
+    
+    # sales = Sale.objects.filter(
+    #     income__range =(50,60)
+    # )
+    # print( [s.income for s in sales])
     
     
     
+    #  oder  by function
+    # res = Restaurant.objects.order_by('name').reverse()
+    # print(res)
+    
+    #  indexing
+    # res  = Restaurant.objects.order_by('date_opened')[3:4]
+    # print(res)
     
     
+        # res  = Restaurant.objects.all()
+        # print(res)
+        
+        
+        # # earlieest and latest functions in django 
+        # In Django, the earliest() and latest() functions are used to retrieve the oldest and 
+        # most recent objects from a database based on 
+        # a specified field, respectively.
+        
+        # res = Restaurant.objects.earliest('date_opened')
+        # print(res)
+        
+        # res1 = Restaurant.objects.latest('date_opened')
+        # print(res1)
+        
+        #  filterinng by Foreign key value 
+        #  eg find all ratings associated with res begin with  'C'
+        my_res =Rating.objects.filter(
+        restaurant__name__startswith ='C'
+        )
+        print(my_res)
+
+
+
+
 
 
 

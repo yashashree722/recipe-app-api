@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import  MinValueValidator, MaxValueValidator
 from django.forms import ValidationError
+from django.db.models.functions import Lower
 
 # restaurant model
 
@@ -37,6 +38,10 @@ class Restaurant(models.Model):
     )
     restaurant_type = models.CharField(max_length=2, choices=TypeChoices.choices)
     
+    # define defaultt oderring
+    class Meta:
+        ordering = [Lower('name'),'date_opened']
+    
     def __str__(self):
         return self.name
     
@@ -65,6 +70,14 @@ class Sale(models.Model):
     
     def __str__(self):
         return f"Sale: {self.restaurant.name} - {self.income}"
+    
+    
+    
+   # Restaurant can have many staff members and staff can work in many restaurants 
+class Staff(models.Model):
+    name = models.CharField(max_length=100)
+    restaurant = models.ManyToManyField(Restaurant)
+    
     
     
 

@@ -18,7 +18,7 @@ class Command(BaseCommand):
             user = user.first()
 
         restaurants = [
-            {'name': 'Pizzeria 1', 'date_opened': timezone.now() - timezone.timedelta(days=20), 'restaurant_type': Restaurant.TypeChoices.ITALIAN, 'latitude': 55.869829854, 'longitude': -4.28583219},
+            {'name': 'Pizzeria 1', 'date_opened': timezone.now() - timezone.timedelta(days=2), 'restaurant_type': Restaurant.TypeChoices.ITALIAN, 'latitude': 55.869829854, 'longitude': -4.28583219},
             {'name': 'Pizzeria 2', 'date_opened': timezone.now() - timezone.timedelta(days=27), 'restaurant_type': Restaurant.TypeChoices.ITALIAN, 'latitude': 55.862, 'longitude': -4.247},
             {'name': 'Golden Dragon', 'date_opened': timezone.now() - timezone.timedelta(days=15), 'restaurant_type': Restaurant.TypeChoices.CHINESE, 'latitude': 55.953251, 'longitude':  -3.188267},
             {'name': 'Bombay Bustle', 'date_opened': timezone.now() - timezone.timedelta(days=44), 'restaurant_type': Restaurant.TypeChoices.INDIAN, 'latitude': 51.509865, 'longitude':  -0.118092},
