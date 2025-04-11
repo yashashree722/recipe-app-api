@@ -1,8 +1,9 @@
-from app.models import Restaurant, Rating, Sale,Staff
+from app.models import Restaurant, Rating, Sale,Staff, StaffRestaurant
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db import connection
 from pprint import pprint
+from django.db.models.functions import  Upper, Lower
 
 
 def run():
@@ -208,20 +209,47 @@ def run():
         # )
         # print(my_res)
         
-        staff , created  = Staff.objects.get_or_create(name ='John Doe')
-        print(staff)
-        # print(type(staff.restaurants))
-        # add, all , count , remove , set , clear , create , filter 
+        # staff , created  = Staff.objects.get_or_create(name ='John Doe')
+        # print(staff)
+        # # print(type(staff.restaurants))
+        # # add, all , count , remove , set , clear , create , filter 
         
-        # 
-        staff.restaurants.add(
-            Restaurant.objects.first(),
-        Restaurant.objects.last()
-        )
+        # # 
+        # staff.restaurants.add(
+        #     Restaurant.objects.first(),
+        # Restaurant.objects.last()
+        # )
         
-        staff.restaurants.set(Restaurant.objects.all()[:5])
+        # staff.restaurants.set(Restaurant.objects.all()[:5])
         
        
+
+        # StaffRestaurant.objects.create(
+        #     staff = staff,
+        #     restaurant = Restaurant.objects.first(),
+        #     salary = 3000.0
+        # )
+        # StaffRestaurant.objects.create(
+        #     staff = staff,
+        #     restaurant = Restaurant.objects.last(),
+        #     salary = 3000.0
+        # )
+        
+        
+        #  value () method will always return a list of dictionaries
+        # res = Restaurant.objects.values(name_upper = Upper('name'))[:3]
+        # print(res)
+        # print(connection.queries)
+        
+        
+        #  getting related filed with using value ()
+        IT = Restaurant.TypeChoices.ITALIAN
+        raatings = Rating.objects.filter(restaurant__restaurant_type = IT).values(
+            'restaurant__name',
+            'rating'
+        )
+        print(raatings)
+        
 
 
 
