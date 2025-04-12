@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db import connection
 from pprint import pprint
-from django.db.models.functions import  Upper, Lower,Length
-from django.db.models import Count,Avg, Sum, Min, Max,F
+from django.db.models.functions import  Upper, Lower,Length,Coalesce
+from django.db.models import Count,Avg, Sum, Min, Max,F,Q
+
 from django.utils import timezone
 from datetime import timedelta
 import random
@@ -341,10 +342,84 @@ def run():
         
         #   F expressions with  aggregate functions
         
-      
-      
         
-
+        #  get all maxican or Italina rest
+        # it = Restaurant.TypeChoices.ITALIAN
+        # mx = Restaurant.TypeChoices.MEXICAN
+        # ans =Restaurant.objects.filter(
+        #     Q(restaurant_type = it) | Q(date_opened__gte = timezone.now() - timedelta(days=365))
+            
+        # )
+        # print(ans.values('name','restaurant_type','date_opened'))
+        
+        # Find all the res that have number 1 
+        # print(
+        #     Restaurant.objects.filter(
+        #         name__endswith = '1'
+        #     )
+        # )
+        
+        # ans = Restaurant.objects.filter(
+        #     Q(restaurant_type = Restaurant.TypeChoices.CHINESE) &
+        #     Q(name__startswith = 'C') |
+        #     Q(name__endswith = '1')
+        # )
+        # print(ans.values('name','restaurant_type'))
+        
+        
+        # The code is written in Python and it is querying a database using Django's ORM
+        # (Object-Relational Mapping).
+        # it_max = Q(name__icontains = 'it') 
+        # not_recenetly_opend = ~Q(date_opened__gte = timezone.now() - timedelta(days=365))
+        # ans = Restaurant.objects.filter(
+        #     it_max | not_recenetly_opend
+        # ) .count()      
+        # print(ans)
+        
+        # #  we want to find all the sale where 
+        # -Prfit is greater than expensditure  OR 
+        # -Restaurant name cotains number 
+        
+        
+        # res_conatn_numebrs = Q(restaurant__name__regex = r'[0-9]+')
+        # prfited = Q(income__gt = F('expenditure'))
+        
+        # ans = Sale.objects.filter(
+        #     res_conatn_numebrs | prfited
+        # ).values(
+        #     'restaurant__name',
+        #     'income',
+        #     'expenditure'
+            
+        # )
+        
+        
+        # print(ans)
+        res =Restaurant.objects.first()
+        res2 = Restaurant.objects.last()
+        res.capacity =12
+        res2.capacity = 90
+        res.save()
+        res2.save()
+        # print(res.capacity)       
+        
+        
+        
+        #  COALESCE function in django
+        # print(Restaurant.objects.filter(capacity__isnull = False).count())
+        
+        # print(Restaurant.objects.order_by('capacity').values('name','capacity'))
+        
+        
+        
+        #  it will show null values at the end of the list and also sort the values in descending order
+        # print(Restaurant.objects.order_by(F('capacity').desc(nulls_last=True)).values('name','capacity'))
+        
+        
+        Restaurant.objects.update(capacity = None)
+        print(Restaurant.objects.aggregate(
+            total_capa = Coalesce(Sum('capacity'),0)
+        ))
 
 
 

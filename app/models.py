@@ -37,6 +37,7 @@ class Restaurant(models.Model):
         null=True, blank=True   
     )
     restaurant_type = models.CharField(max_length=2, choices=TypeChoices.choices)
+    capacity =  models.PositiveSmallIntegerField(null=True , blank=True)
     
     # define defaultt oderring
     class Meta:
