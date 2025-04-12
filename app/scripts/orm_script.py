@@ -4,9 +4,10 @@ from django.utils import timezone
 from django.db import connection
 from pprint import pprint
 from django.db.models.functions import  Upper, Lower,Length
-from django.db.models import Count,Avg, Sum, Min, Max
+from django.db.models import Count,Avg, Sum, Min, Max,F
 from django.utils import timezone
 from datetime import timedelta
+import random
 
 
 def run():
@@ -236,7 +237,7 @@ def run():
         
         # staff.restaurants.set(Restaurant.objects.all()[:5])
         
-       
+    #     
 
         # StaffRestaurant.objects.create(
         #     staff = staff,
@@ -259,42 +260,89 @@ def run():
         #  getting related filed with using value ()
         # IT = Restaurant.TypeChoices.ITALIAN
         # raatings = Rating.objects.filter(restaurant__restaurant_type = IT).values(
-        #     'restaurant__name',
-        #     'rating'
-        # )
-        # print(raatings)
+#         #     'restaurant__name',
+#         #     'rating'
+#         # )
+#         # print(raatings)
         
         
-        #  value_list () : instead of returning a dictionary it return tuple
-        # # flat = True will return a  list
-        # res = Restaurant.objects.values_list('latitude',flat=True)
-        # print(res)
+#         #  value_list () : instead of returning a dictionary it return tuple
+#         # # flat = True will return a  list
+#         # res = Restaurant.objects.values_list('latitude',flat=True)
+#         # print(res)
         
-        # Annotating  models = when we want result for each item in qs use annotate 
-        # eg : we want all res and wanted to get total number of char in each Restaurant
-        # use annotate in this case as we are running query for each restaurant
-        # res = Restaurant.objects.annotate(
-        #     name_length = Length('name')
-        # ).filter(
-        #     name_length__gt = 5
-        # ).order_by('-name_length')
-        # print(res.values('name_length'))
+#         # Annotating  models = when we want result for each item in qs use annotate 
+#         # eg : we want all res and wanted to get total number of char in each Restaurant
+#         # use annotate in this case as we are running query for each restaurant
+#         # res = Restaurant.objects.annotate(
+#         #     name_length = Length('name')
+#         # ).filter(
+#         #     name_length__gt = 5
+#         # ).order_by('-name_length')
+#         # print(res.values('name_length'))
         
         
-        # res = Restaurant.objects.annotate(
-        #     total_sale = Sum('sales__income') ,
-        #     avg_ratings = Avg('ratings__rating')
-        # )
-        # print(res.values('name','total_sale','avg_ratings'))
-        # # print(connection.queries)  
+#         # res = Restaurant.objects.annotate(
+#         #     total_sale = Sum('sales__income') ,
+#         #     avg_ratings = Avg('ratings__rating')
+#         # )
+#         # print(res.values('name','total_sale','avg_ratings'))
+#         # # print(connection.queries)  
          
          
          
-        #  if we use values before annotate theen its going to group by the fields we are using in values
-        res = Restaurant.objects.values('restaurant_type').annotate(
-            num_rate =  Count('ratings')
-        )
-        print(res.values('restaurant_type','num_rate'))
+#         # #  if we use values before annotate theen its going to group by the fields we are using in values
+#         # res = Restaurant.objects.values('restaurant_type').annotate(
+#         #     num_rate =  Count('ratings')
+#         # )
+#         # print(res.values('restaurant_type','num_rate'))
+        
+        
+#         #  F expressions
+# #         In Django ORM, F expressions are used to reference model field values directly in the database query, rather than using Python variables or functions.
+# #  This allows for efficient database operations, such as updating fields based on their current values, without the need to fetch the data into Python first.
+# #  For example, to increase the price of all products by 20%, you can use an F expression in a single query like this:
+# # When to use F()?
+# # To update a field using its own value
+
+# # To compare two fields
+
+# # To do calculations in the database (faster and safer)
+
+# # To avoid race conditions (like in concurrent updates)
+# # from django.db.models import F
+
+# # Product.objects.update(price=F('price') * 1.2)
+#         rating= Rating.objects.filter(rating=3).first()
+        
+        
+#         # update value of rating by 1
+#         rating.rating = F('rating') + 1
+#         rating.save()
+#         # print(rating)
+#         print(Rating.objects.all())
+
+        # sale = Sale.objects.all()
+        # for  s in sale:
+        #     s.expenditure =random.randint(5,100)
+            
+        # Sale.objects.bulk_update(sale, ['expenditure'])
+        
+        # ss = Sale.objects.filter(expenditure__gt = F('income'))
+        # print(ss.values('expenditure'))
+        #  F exprression in annotate functions
+        
+        
+        # sale = Sale.objects.annotate(
+        #     profit  = F('income') - F('expenditure')
+        # ).order_by('-profit')
+        # print(sale.values('profit'))
+        # # print(sale.first().profit)
+        
+        #   F expressions with  aggregate functions
+        
+      
+      
         
 
 
@@ -314,4 +362,4 @@ def run():
     
     
     
-    # restaurant.save()
+   

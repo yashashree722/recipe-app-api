@@ -67,6 +67,7 @@ class Sale(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.SET_NULL, null= True, related_name='sales')
     income = models.DecimalField(max_digits=8, decimal_places=2)
     datetime = models.DateTimeField()
+    expenditure = models.DecimalField(max_digits=8, decimal_places=2)
     
     def __str__(self):
         return f"Sale: {self.restaurant.name} - {self.income}"
@@ -82,6 +83,7 @@ class Staff(models.Model):
 class StaffRestaurant(models.Model):
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    
     salary = models.FloatField(null=True)
     
     
