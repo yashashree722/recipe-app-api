@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.db import connection
 from pprint import pprint
 from django.db.models.functions import  Upper, Lower,Length,Coalesce
-from django.db.models import Count,Avg, Sum, Min, Max,F,Q
+from django.db.models import Count,Avg, Sum, Min, Max,F,Q,Case,When, Subquery, OuterRef
 
 from django.utils import timezone
 from datetime import timedelta
@@ -395,12 +395,12 @@ def run():
         
         
         # print(ans)
-        res =Restaurant.objects.first()
-        res2 = Restaurant.objects.last()
-        res.capacity =12
-        res2.capacity = 90
-        res.save()
-        res2.save()
+        # res =Restaurant.objects.first()
+        # res2 = Restaurant.objects.last()
+        # res.capacity =12
+        # res2.capacity = 90
+        # res.save()
+        # res2.save()
         # print(res.capacity)       
         
         
@@ -416,12 +416,82 @@ def run():
         # print(Restaurant.objects.order_by(F('capacity').desc(nulls_last=True)).values('name','capacity'))
         
         
-        Restaurant.objects.update(capacity = None)
-        print(Restaurant.objects.aggregate(
-            total_capa = Coalesce(Sum('capacity'),0)
-        ))
+        # Restaurant.objects.update(capacity = None)
+        # print(Restaurant.objects.aggregate(
+        #     total_capa = Coalesce(Sum('capacity'),0)
+        # ))
+        # r = Restaurant.objects.first()
+        # r.nickname = 'yash'
+        # r.save()
+        # print(Restaurant.objects.annotate(
+        #     name_val = Coalesce(F('nickname'),F('name'))
+        # )).values('name_val')
+        
+        
+        #  Case () and when () functions in django
+        # italian = Restaurant.TypeChoices.ITALIAN
+        # res = Restaurant.objects.annotate(
+        #     is_italian = Case(      
+        #         When(restaurant_type = italian, then=True),
+        #         default=False,
+        #         # output_field=models.BooleanField()
+        #     )
+        # )
+        # print(res.values('name','is_italian'))
+        
+        # res = Restaurant.objects.annotate(
+        #     nsale = Count('sales')
+        # )
+        # res = res.annotate(
+        #     is_popular = Case(
+        #         When(nsale__gt = 5, then=True),
+        #         default= False
+        #     )
+        # )
+        # # print(res.filter(is_popular = True).values('name','nsale'))
+        
+        # res = Restaurant.objects.annotate(
+        #     avg_rating = Avg('ratings__rating'),
+        #     num_ratings = Count('ratings')
+            
+        # )
+        # res = res.annotate(
+        #     highl_rate = Case(
+        #         When(num_ratings__gt = 5, avg_rating__gt = 8, then=True),
+        #         default = False
+        #     )
+        # )
+        # print(res.filter)
+        
+        # types = Restaurant.TypeChoices
+        
+        # res = Restaurant.objects.annotate(
+        #     continent = Case(
+        #         When(Q(restaurant_type = types.CHINESE) | Q(restaurant_type = types.INDIAN), then='Asia'),
+        #         When(Q(restaurant_type = types.MEXICAN) | Q(restaurant_type = types.ITALIAN), then='America'),
+        #         When(Q(restaurant_type = types.OTHER), then='Other'),
+        #         default= 'Unknown', 
+        #     )
+        # )
+        # print(res.filter(continent = 'America').values('name','continent'))
 
+#  subquery example
+        # sale = Sale.objects.filter(
+        #     restaurant__restaurant_type__in =['IT','CH']
+            
+        # )
+        # print(sale.values_list( 'restaurant__restaurant_type').distinct())
+        
+        res = Restaurant.objects.filter(
+            restaurant_type__in = ['IT','CH']
 
+        )
+        sale = Sale.objects.filter(
+            restaurant__in = Subquery(res.values('id')),
+
+        )
+        print(len(sale))
+        # print(len(sale))
 
 
 

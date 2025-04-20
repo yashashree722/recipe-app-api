@@ -38,6 +38,7 @@ class Restaurant(models.Model):
     )
     restaurant_type = models.CharField(max_length=2, choices=TypeChoices.choices)
     capacity =  models.PositiveSmallIntegerField(null=True , blank=True)
+    nickname = models.CharField(max_length=100, null=True, blank=True)
     
     # define defaultt oderring
     class Meta:
